@@ -6,7 +6,7 @@ Crawlab的任务执行依赖于shell。执行一个爬虫任务相当于在shell
 
 ![](https://crawlab.oss-cn-hangzhou.aliyuncs.com/v0.3.0/task-execution.png)
 
-当爬虫任务被派发时，主节点会在Redis中的`tasks:<node_id>`（指定工作节点）和`tasks:public`（任意工作节点）派发任务，也就是`LPUSH`命令。
+当爬虫任务被派发时，主节点会在Redis中的`tasks:<node_id>`（指定工作节点）和`tasks:public`（任意工作节点）派发任务，也就是`RPUSH`命令。
 
 工作节点在启动时会起N个执行器（通过环境变量`CRAWLAB_TASK_WORKERS`配置，默认为4），每个执行器会轮训Redis的消息队列，优先获取指定节点消息队列`tasks:<node_id>`，如果指定队列中没有任务，才会获取任意节点消息队列中的任务`tasks:public`。
 
