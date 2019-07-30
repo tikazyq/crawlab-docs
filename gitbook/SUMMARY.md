@@ -25,9 +25,10 @@
 * [原理](Architecture/README.md)
     * [整体架构](Architecture/Architecture.md)
     * [节点通信](Architecture/NodeCommunication.md)
+    * [节点监控](Architecture/NodeMonitoring.md)
     * [爬虫部署](Architecture/SpiderDeployment.md)
-    * [爬虫部署](Architecture/TaskExecution.md)
+    * [任务执行](Architecture/TaskExecution.md)
 * [样例](Examples/README.md)
     * [与Scrapy集成](Examples/ScrapyIntegration.md)
-    #* [与Puppeteer集成](Examples/PuppeteerIntegration.md)
+    * [与Puppeteer集成](Examples/PuppeteerIntegration.md)
 
