@@ -15,7 +15,7 @@ git clone https://github.com/tikazyq/crawlab
 安装前端所需库。
 
 ```bash
-npm install -g yarn pm2
+npm install -g yarn
 cd frontend
 yarn install
 ```
@@ -23,15 +23,15 @@ yarn install
 安装后端所需库。
 
 ```bash
-cd ../crawlab
-pip install -r requirements
+cd ../backend
+go install ./...
 ```
 
 ### 配置
 
-分别配置前端配置文件`./frontend/.env.production`和后端配置文件`./crawlab/config/config.py`。分别需要对部署后API地址以及数据库地址进行配置。
+修改配置文件`./backend/config.yaml`。配置文件是以`yaml`的格式。配置详情请见[配置Crawlab](../Config/README.md)。
 
-### 构建
+### 构建前端
 
 这里的构建是指前端构建，需要执行以下命令。
 
@@ -56,7 +56,7 @@ sudo apt-get install nginx
 server {
     listen    8080;
     server_name    dev.crawlab.com;
-    root    /home/yeqing/jenkins_home/workspace/crawlab_develop/frontend/dist;
+    root    /path/to/dist;
     index    index.html;
 }
 ```
@@ -69,20 +69,23 @@ server {
 nginx reload
 ```
 
-### 启动服务
+### 构建后端
 
-这里是指启动后端服务。我们用`pm2`来管理进程。执行以下命令。
+执行以下命令。
 
 ```bash
-pm2 start app.py # API服务
-pm2 start worker.py # Worker
-pm2 start flower.py # Flower
+cd ../backend
+go build
 ```
 
-这样，`pm2`会启动3个守护进程来管理这3个服务。我们如果想看后端服务的日志的话，可以执行以下命令。
+`go build`命令会将Golang代码打包为一个执行文件，默认在`$GOPATH/bin`里。
+
+### 启动服务
+
+这里是指启动后端服务。执行以下命令。
 
 ```bash
-pm2 logs [app]
+$GOPATH/bin/crawlab
 ```
 
 然后在浏览器中输入`http://localhost:8080`就可以看到界面了。

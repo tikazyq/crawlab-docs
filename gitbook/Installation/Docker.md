@@ -1,6 +1,6 @@
 ## Docker安装部署
 
-这应该是部署应用的最方便也是最节省时间的方式了。在最近的一次版本更新[v0.2.3](https://github.com/tikazyq/crawlab/releases/tag/v0.2.3)中，我们发布了Docker功能，让大家可以利用Docker来轻松部署Crawlab。下面将一步一步介绍如何使用Docker来部署Crawlab。
+这应该是部署应用的最方便也是最节省时间的方式了。在最近的一次版本更新[v0.3.0](https://github.com/tikazyq/crawlab/releases/tag/v0.3.0)中，我们发布了Golang版本，并且支持Docker部署。下面将一步一步介绍如何使用Docker来部署Crawlab。
 
 对Docker不了解的开发者，可以参考一下这篇文章（[9102 年了，学点 Docker 知识](https://juejin.im/post/5c2c69cee51d450d9707236e)）做进一步了解。简单来说，Docker可以利用已存在的镜像帮助构建一些常用的服务和应用，例如Nginx、MongoDB、Redis等等。用Docker运行一个MongoDB服务仅需`docker run -d --name mongo -p 27017:27017 mongo`一行命令。如何安装Docker跟操作系统有关，这里就不展开讲了，需要的同学自行百度一下相关教程。
 
@@ -22,52 +22,78 @@
 docker pull tikazyq/crawlab:latest
 ```
 
-### 更改配置文件
-
-拷贝一份后端配置文件`./crawlab/config/config.py`以及前端配置文件`./frontend/.env.production`到某一个地方。例如我的例子，分别为`/home/yeqing/config.py`和`/home/yeqing/.env.production`。
-
-更改后端配置文件`config.py`，将MongoDB、Redis的指向IP更改为自己数据的值。注意，容器中对应的宿主机的IP地址不是`localhost`，而是`172.17.0.1`（当然也可以用network来做，只是稍微麻烦一些）。更改前端配置文件`.env.production`，将API地址`VUE_APP_BASE_URL`更改为宿主机所在的IP地址，例如`http://192.168.0.8:8000`，这将是前端调用API会用到的URL。
-
 ### 运行Docker容器
 
-更改好配置文件之后，接下来就是运行容器了。执行以下命令来启动容器。
+之前的版本需要更改配置文件来配置数据库等参数，非常麻烦。在最近的版本`v0.3.0`中，我们实现了用环境变量来替代配置文件，简化了配置步骤。
+
+运行以下命令启动主节点。
 
 ```bash
-docker run -d --rm --name crawlab \
-	-p 8080:8080 \
-	-p 8000:8000 \
-	-v /home/yeqing/.env.production:/opt/crawlab/frontend/.env.production \
-	-v /home/yeqing/config.py:/opt/crawlab/crawlab/config/config.py \
-	tikazyq/crawlab master
+docker run -d --restart always --name crawlab \
+        -e CRAWLAB_REDIS_ADDRESS=192.168.99.1:6379 \
+        -e CRAWLAB_MONGO_HOST=192.168.99.1 \
+        -e CRAWLAB_SERVER_MASTER=Y \
+        -e CRAWLAB_API_ADDRESS=192.168.99.100:8000 \
+        -p 8080:8080 \
+        -p 8000:8000 \
+        -v /var/logs/crawlab:/var/logs/crawlab \
+        tikazyq/crawlab:0.3.0
 ```
 
-其中，我们映射了8080端口（Nginx前端静态文件）以及8000端口（后端API）到宿主机。另外还将前端配置文件`/home/yeqing/.env.production`和后端配置文件`/home/yeqing/config.py`映射到了容器相应的目录下。传入参数`master`是代表该启动方式为主机启动模式，也就是所有服务（前端、Api、Flower、Worker）都会启动。另外一个模式是`worker`模式，只会启动必要的Api和Worker服务，这个对于分布式部署比较有用。等待大约20-30秒的时间来build前端静态文件，之后就可以打开Crawlab界面地址地址看到界面了。界面地址默认为`http://localhost:8080`。
+其中，我们设置了Redis和MongoDB的地址，分别通过`CRAWLAB_REDIS_ADDRESS`和`CRAWLAB_MONGO_HOST`参数。`CRAWLAB_SERVER_MASTER`设置为`Y`表示启动的是主节点（该参数默认是为`N`，表示为工作节点）。`CRAWLAB_API_ADDRESS`是前端的API地址，请将这个设置为公网能访问到主节点的地址，`8000`是API端口。环境变量配置详情请见[配置Crawlab](../Config/README.md)，您可以根据自己的要求来进行配置。
 
-![](https://user-gold-cdn.xitu.io/2019/6/12/16b4c3ed5dcd6cfc?w=2532&h=1300&f=png&s=146531)
+此外，我们通过`-p`参数映射了8080端口（Nginx前端静态文件）以及8000端口（后端API）到宿主机。我们将任务日志目录`/var/logs/crawlab`映射出来，保证Docker重启时不会丢失日志文件（当然，我们现在用文件系统来保存日志的方式可能不是一个很好的解决方案，如果您有更好的建议，请在Github上提Issue或者Pull Request）。
+
+您可能好奇为什么我们用`192.168.99.1`，而不是`localhost`。这是因为我这里的例子是用的Docker Machine，它会在宿主机创建一个`192.168.99.*`的网络，而`192.168.99.1`是宿主机的IP地址，`192.168.99.100`就是该Docker Container的地址。因此，这里的启动配置表示，我们启动的主节点连接的是宿主机的Redis和MongoDB，而API地址为该主节点地址。当然，为了方便配置，我们可以用`docker-compose`来管理Docker集群，让他们在同一个网络中，后面我们会介绍。
+
+类似，我们也可以启动工作节点。
+
+```bash
+docker run --restart always --name crawlab \
+        -e CRAWLAB_REDIS_ADDRESS=192.168.99.1:6379 \
+        -e CRAWLAB_MONGO_HOST=192.168.99.1 \
+        -e CRAWLAB_SERVER_MASTER=N \
+        -v /var/logs/crawlab:/var/logs/crawlab \
+        tikazyq/crawlab:0.3.0
+```
+
+这里，我们将`CRAWLAB_SERVER_MASTER`设置为`N`，表示它为工作节点（切勿设置多个节点为`Y`，这可能会导致无法预测的问题）。
+
+以上两个Docker启动的命令在Github上，详情请见[Examples](https://github.com/tikazyq/crawlab/tree/master/examples)。
 
 ### Docker-Compose
 
-当然，也可以用`docker-compose`的方式来部署。`docker-compose`是一个集群管理方式，可以利用名为`docker-compose.yml`的`yaml`文件来定义需要启动的容器，可以是单个，也可以（通常）是多个的。Crawlab的`docker-compose.yml`定义如下。
+当然，也可以用`docker-compose`的方式来部署。`docker-compose`是一个集群管理方式，可以利用名为`docker-compose.yml`的`yaml`文件来定义需要启动的容器，可以是单个，也可以（通常）是多个的。
+
+Crawlab的`docker-compose.yml`定义如下。
 
 ```yaml
 version: '3.3'
 services:
   master: 
     image: tikazyq/crawlab:latest
-    container_name: crawlab
-    volumns:
-      - /home/yeqing/config.py:/opt/crawlab/crawlab/config/config.py # 后端配置文件
-      - /home/yeqing/.env.production:/opt/crawlab/frontend/.env.production # 前端配置文件
+    container_name: crawlab-master
+    environment:
+      CRAWLAB_API_ADDRESS: "192.168.99.100:8000"
+      CRAWLAB_SERVER_MASTER: "Y"
+      CRAWLAB_MONGO_HOST: "mongo"
+      CRAWLAB_REDIS_ADDRESS: "redis:6379"
     ports:    
-      - "8080:8080" # nginx
-      - "8000:8000" # app
+      - "8080:8080" # frontend
+      - "8000:8000" # backend
     depends_on:
       - mongo
       - redis
-    entrypoint:
-      - /bin/sh
-      - /opt/crawlab/docker_init.sh
-      - master
+  worker:
+    image: tikazyq/crawlab:latest
+    container_name: crawlab-worker
+    environment:
+      CRAWLAB_SERVER_MASTER: "N"
+      CRAWLAB_MONGO_HOST: "mongo"
+      CRAWLAB_REDIS_ADDRESS: "redis:6379"
+    depends_on:
+      - mongo
+      - redis
   mongo:
     image: mongo:latest
     restart: always
@@ -80,9 +106,9 @@ services:
       - "6379:6379"
 ```
 
-这里先定义了`master`节点，也就是Crawlab的主节点。`master`依赖于`mongo`和`redis`容器，因此在启动之前会同时启动`mongo`和`redis`容器。这样就不需要单独配置`mongo`和`redis`服务了，大大节省了环境配置的时间。
+这里先定义了`master`节点和`worker`节点，也就是Crawlab的主节点和工作节点。`master`和`worker`依赖于`mongo`和`redis`容器，因此在启动之前会同时启动`mongo`和`redis`容器。这样就不需要单独配置`mongo`和`redis`服务了，大大节省了环境配置的时间。
 
-安装`docker-compose`也很简单，大家去网上百度一下就可以了。
+安装`docker-compose`也很简单，大家去网上百度一下有中文教程。英语水平还可以的可以参考一下[官方文档](https://docs.docker.com/compose/)。
 
 安装完`docker-compose`和定义好`docker-compose.yml`后，只需要运行以下命令就可以启动Crawlab。
 
@@ -90,69 +116,4 @@ services:
 docker-compose up
 ```
 
-同样，在浏览器中输入`http://localhost:8080`就可以看到界面。
-
-### 多节点模式
-
-`docker-compose`的方式很适合多节点部署，在原有的`master`基础上增加几个`worker`节点，达到多节点部署的目的。将`docker-compose.yml`更改为如下内容。
-
-```yaml
-version: '3.3'
-services:
-  master: 
-    image: tikazyq/crawlab:latest
-    container_name: crawlab
-    volumns:
-      - /home/yeqing/config.master.py:/opt/crawlab/crawlab/config/config.py # 后端配置文件
-      - /home/yeqing/.env.production.master:/opt/crawlab/frontend/.env.production # 前端配置文件
-    ports:    
-      - "8080:8080" # nginx
-      - "8000:8000" # app
-    depends_on:
-      - mongo
-      - redis
-    entrypoint:
-      - /bin/sh
-      - /opt/crawlab/docker_init.sh
-      - master
-  worker1: 
-    image: tikazyq/crawlab:latest
-    volumns:
-      - /home/yeqing/config.worker.py:/opt/crawlab/crawlab/config/config.py # 后端配置文件
-      - /home/yeqing/.env.production.worker:/opt/crawlab/frontend/.env.production # 前端配置文件
-    ports:
-      - "8001:8000" # app
-    depends_on:
-      - mongo
-      - redis
-    entrypoint:
-      - /bin/sh
-      - /opt/crawlab/docker_init.sh
-      - worker
-  worker2: 
-    image: tikazyq/crawlab:latest
-    volumns:
-      - /home/yeqing/config.worker.py:/opt/crawlab/crawlab/config/config.py # 后端配置文件
-      - /home/yeqing/.env.production.worker:/opt/crawlab/frontend/.env.production # 前端配置文件
-    ports:
-      - "8002:8000" # app
-    depends_on:
-      - mongo
-      - redis
-    entrypoint:
-      - /bin/sh
-      - /opt/crawlab/docker_init.sh
-      - worker
-  mongo:
-    image: mongo:latest
-    restart: always
-    ports:
-      - "27017:27017"
-  redis:
-    image: redis:latest
-    restart: always
-    ports:
-      - "6379:6379"
-```
-
-这里启动了多增加了两个`worker`节点，以`worker`模式启动。这样，多节点部署，也就是分布式部署就完成了。
+同样，在浏览器中输入`http://localhost:8080`就可以看到界面（Docker Machine是`192.168.99.100`）。
