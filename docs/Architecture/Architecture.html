@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <title>与Scrapy集成 · GitBook</title>
+        <title>整体架构 · GitBook</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="GitBook 3.2.3">
@@ -57,7 +57,7 @@
     <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="PuppeteerIntegration.html" />
+    <link rel="next" href="NodeCommunication.html" />
     
     
     <link rel="prev" href="./" />
@@ -366,9 +366,9 @@
             
         </li>
     
-        <li class="chapter " data-level="1.5" data-path="../Architecture/">
+        <li class="chapter " data-level="1.5" data-path="./">
             
-                <a href="../Architecture/">
+                <a href="./">
             
                     
                     原理
@@ -380,9 +380,9 @@
             <ul class="articles">
                 
     
-        <li class="chapter " data-level="1.5.1" data-path="../Architecture/Architecture.html">
+        <li class="chapter active" data-level="1.5.1" data-path="Architecture.html">
             
-                <a href="../Architecture/Architecture.html">
+                <a href="Architecture.html">
             
                     
                     整体架构
@@ -393,9 +393,9 @@
             
         </li>
     
-        <li class="chapter " data-level="1.5.2" data-path="../Architecture/NodeCommunication.html">
+        <li class="chapter " data-level="1.5.2" data-path="NodeCommunication.html">
             
-                <a href="../Architecture/NodeCommunication.html">
+                <a href="NodeCommunication.html">
             
                     
                     节点通信
@@ -406,9 +406,9 @@
             
         </li>
     
-        <li class="chapter " data-level="1.5.3" data-path="../Architecture/NodeMonitoring.html">
+        <li class="chapter " data-level="1.5.3" data-path="NodeMonitoring.html">
             
-                <a href="../Architecture/NodeMonitoring.html">
+                <a href="NodeMonitoring.html">
             
                     
                     节点监控
@@ -419,9 +419,9 @@
             
         </li>
     
-        <li class="chapter " data-level="1.5.4" data-path="../Architecture/SpiderDeployment.html">
+        <li class="chapter " data-level="1.5.4" data-path="SpiderDeployment.html">
             
-                <a href="../Architecture/SpiderDeployment.html">
+                <a href="SpiderDeployment.html">
             
                     
                     爬虫部署
@@ -432,9 +432,9 @@
             
         </li>
     
-        <li class="chapter " data-level="1.5.5" data-path="../Architecture/TaskExecution.html">
+        <li class="chapter " data-level="1.5.5" data-path="TaskExecution.html">
             
-                <a href="../Architecture/TaskExecution.html">
+                <a href="TaskExecution.html">
             
                     
                     任务执行
@@ -450,9 +450,9 @@
             
         </li>
     
-        <li class="chapter " data-level="1.6" data-path="./">
+        <li class="chapter " data-level="1.6" data-path="../Examples/">
             
-                <a href="./">
+                <a href="../Examples/">
             
                     
                     样例
@@ -464,9 +464,9 @@
             <ul class="articles">
                 
     
-        <li class="chapter active" data-level="1.6.1" data-path="ScrapyIntegration.html">
+        <li class="chapter " data-level="1.6.1" data-path="../Examples/ScrapyIntegration.html">
             
-                <a href="ScrapyIntegration.html">
+                <a href="../Examples/ScrapyIntegration.html">
             
                     
                     与Scrapy集成
@@ -477,9 +477,9 @@
             
         </li>
     
-        <li class="chapter " data-level="1.6.2" data-path="PuppeteerIntegration.html">
+        <li class="chapter " data-level="1.6.2" data-path="../Examples/PuppeteerIntegration.html">
             
-                <a href="PuppeteerIntegration.html">
+                <a href="../Examples/PuppeteerIntegration.html">
             
                     
                     与Puppeteer集成
@@ -525,7 +525,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href=".." >与Scrapy集成</a>
+        <a href=".." >整体架构</a>
     </h1>
 </div>
 
@@ -540,29 +540,29 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h3 id="&#x4E0E;scrapy&#x96C6;&#x6210;">&#x4E0E;Scrapy&#x96C6;&#x6210;</h3>
-<p>&#x4EE5;&#x4E0B;&#x662F;Crawlab&#x8DDF;<code>Scrapy</code>&#x96C6;&#x6210;&#x7684;&#x4F8B;&#x5B50;&#xFF0C;&#x5229;&#x7528;&#x4E86;Crawlab&#x4F20;&#x8FC7;&#x6765;&#x7684;<code>task_id</code>&#x548C;<code>collection_name</code>&#x3002;</p>
-<pre><code class="lang-python"><span class="hljs-keyword">import</span> os
-<span class="hljs-keyword">from</span> pymongo <span class="hljs-keyword">import</span> MongoClient
-
-MONGO_HOST = <span class="hljs-string">&apos;192.168.99.100&apos;</span>
-MONGO_PORT = <span class="hljs-number">27017</span>
-MONGO_DB = <span class="hljs-string">&apos;crawlab_test&apos;</span>
-
-<span class="hljs-comment"># scrapy example in the pipeline</span>
-<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">JuejinPipeline</span><span class="hljs-params">(object)</span>:</span>
-    mongo = MongoClient(host=MONGO_HOST, port=MONGO_PORT)
-    db = mongo[MONGO_DB]
-    col_name = os.environ.get(<span class="hljs-string">&apos;CRAWLAB_COLLECTION&apos;</span>)
-    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> col_name:
-        col_name = <span class="hljs-string">&apos;test&apos;</span>
-    col = db[col_name]
-
-    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">process_item</span><span class="hljs-params">(self, item, spider)</span>:</span>
-        item[<span class="hljs-string">&apos;task_id&apos;</span>] = os.environ.get(<span class="hljs-string">&apos;CRAWLAB_TASK_ID&apos;</span>)
-        self.col.save(item)
-        <span class="hljs-keyword">return</span> item
-</code></pre>
+                                <h2 id="&#x6574;&#x4F53;&#x67B6;&#x6784;">&#x6574;&#x4F53;&#x67B6;&#x6784;</h2>
+<p>Crawlab&#x7684;&#x67B6;&#x6784;&#x5305;&#x62EC;&#x4E86;&#x4E00;&#x4E2A;&#x4E3B;&#x8282;&#x70B9;&#xFF08;Master Node&#xFF09;&#x548C;&#x591A;&#x4E2A;&#x5DE5;&#x4F5C;&#x8282;&#x70B9;&#xFF08;Worker Node&#xFF09;&#xFF0C;&#x4EE5;&#x53CA;&#x8D1F;&#x8D23;&#x901A;&#x4FE1;&#x548C;&#x6570;&#x636E;&#x50A8;&#x5B58;&#x7684;Redis&#x548C;MongoDB&#x6570;&#x636E;&#x5E93;&#x3002;</p>
+<p><img src="https://crawlab.oss-cn-hangzhou.aliyuncs.com/v0.3.0/architecture.png" alt=""></p>
+<p>&#x524D;&#x7AEF;&#x5E94;&#x7528;&#x5411;&#x4E3B;&#x8282;&#x70B9;&#x8BF7;&#x6C42;&#x6570;&#x636E;&#xFF0C;&#x4E3B;&#x8282;&#x70B9;&#x901A;&#x8FC7;MongoDB&#x548C;Redis&#x6765;&#x6267;&#x884C;&#x4EFB;&#x52A1;&#x6D3E;&#x53D1;&#x8C03;&#x5EA6;&#x4EE5;&#x53CA;&#x90E8;&#x7F72;&#xFF0C;&#x5DE5;&#x4F5C;&#x8282;&#x70B9;&#x6536;&#x5230;&#x4EFB;&#x52A1;&#x4E4B;&#x540E;&#xFF0C;&#x5F00;&#x59CB;&#x6267;&#x884C;&#x722C;&#x866B;&#x4EFB;&#x52A1;&#xFF0C;&#x5E76;&#x5C06;&#x4EFB;&#x52A1;&#x7ED3;&#x679C;&#x50A8;&#x5B58;&#x5230;MongoDB&#x3002;&#x67B6;&#x6784;&#x76F8;&#x5BF9;&#x4E8E;<code>v0.3.0</code>&#x4E4B;&#x524D;&#x7684;Celery&#x7248;&#x672C;&#x6709;&#x6240;&#x7CBE;&#x7B80;&#xFF0C;&#x53BB;&#x9664;&#x4E86;&#x4E0D;&#x5FC5;&#x8981;&#x7684;&#x8282;&#x70B9;&#x76D1;&#x63A7;&#x6A21;&#x5757;Flower&#xFF0C;&#x8282;&#x70B9;&#x76D1;&#x63A7;&#x4E3B;&#x8981;&#x7531;Redis&#x5B8C;&#x6210;&#x3002;</p>
+<h3 id="&#x4E3B;&#x8282;&#x70B9;">&#x4E3B;&#x8282;&#x70B9;</h3>
+<p>&#x4E3B;&#x8282;&#x70B9;&#x662F;&#x6574;&#x4E2A;Crawlab&#x67B6;&#x6784;&#x7684;&#x6838;&#x5FC3;&#xFF0C;&#x5C5E;&#x4E8E;Crawlab&#x7684;&#x4E2D;&#x63A7;&#x7CFB;&#x7EDF;&#x3002;</p>
+<p>&#x4E3B;&#x8282;&#x70B9;&#x4E3B;&#x8981;&#x8D1F;&#x8D23;&#x4EE5;&#x4E0B;&#x529F;&#x80FD;:</p>
+<ol>
+<li>&#x722C;&#x866B;&#x4EFB;&#x52A1;&#x8C03;&#x5EA6;</li>
+<li>&#x5DE5;&#x4F5C;&#x8282;&#x70B9;&#x7BA1;&#x7406;&#x548C;&#x901A;&#x4FE1;</li>
+<li>&#x722C;&#x866B;&#x90E8;&#x7F72;</li>
+<li>&#x524D;&#x7AEF;&#x4EE5;&#x53CA;API&#x670D;&#x52A1;</li>
+<li>&#x6267;&#x884C;&#x4EFB;&#x52A1;&#xFF08;&#x53EF;&#x4EE5;&#x5C06;&#x4E3B;&#x8282;&#x70B9;&#x5F53;&#x6210;&#x5DE5;&#x4F5C;&#x8282;&#x70B9;&#xFF09;</li>
+</ol>
+<p>&#x4E3B;&#x8282;&#x70B9;&#x8D1F;&#x8D23;&#x4E0E;&#x524D;&#x7AEF;&#x5E94;&#x7528;&#x8FDB;&#x884C;&#x901A;&#x4FE1;&#xFF0C;&#x5E76;&#x901A;&#x8FC7;Redis&#x5C06;&#x722C;&#x866B;&#x4EFB;&#x52A1;&#x6D3E;&#x53D1;&#x7ED9;&#x5DE5;&#x4F5C;&#x8282;&#x70B9;&#x3002;&#x540C;&#x65F6;&#xFF0C;&#x4E3B;&#x8282;&#x70B9;&#x4F1A;&#x540C;&#x6B65;&#xFF08;&#x90E8;&#x7F72;&#xFF09;&#x722C;&#x866B;&#x7ED9;&#x5DE5;&#x4F5C;&#x8282;&#x70B9;&#xFF0C;&#x901A;&#x8FC7;Redis&#x548C;MongoDB&#x7684;GridFS&#x3002;</p>
+<h3 id="&#x5DE5;&#x4F5C;&#x8282;&#x70B9;">&#x5DE5;&#x4F5C;&#x8282;&#x70B9;</h3>
+<p>&#x5DE5;&#x4F5C;&#x8282;&#x70B9;&#x7684;&#x4E3B;&#x8981;&#x529F;&#x80FD;&#x662F;&#x6267;&#x884C;&#x722C;&#x866B;&#x4EFB;&#x52A1;&#x548C;&#x50A8;&#x5B58;&#x6293;&#x53D6;&#x6570;&#x636E;&#x4E0E;&#x65E5;&#x5FD7;&#xFF0C;&#x5E76;&#x4E14;&#x901A;&#x8FC7;Redis&#x7684;<code>PubSub</code>&#x8DDF;&#x4E3B;&#x8282;&#x70B9;&#x901A;&#x4FE1;&#x3002;&#x901A;&#x8FC7;&#x589E;&#x52A0;&#x5DE5;&#x4F5C;&#x8282;&#x70B9;&#x6570;&#x91CF;&#xFF0C;Crawlab&#x53EF;&#x4EE5;&#x505A;&#x5230;&#x6A2A;&#x5411;&#x6269;&#x5C55;&#xFF0C;&#x4E0D;&#x540C;&#x7684;&#x722C;&#x866B;&#x4EFB;&#x52A1;&#x53EF;&#x4EE5;&#x5206;&#x914D;&#x5230;&#x4E0D;&#x540C;&#x7684;&#x8282;&#x70B9;&#x4E0A;&#x6267;&#x884C;&#x3002;</p>
+<h3 id="mongodb">MongoDB</h3>
+<p>MongoDB&#x662F;Crawlab&#x7684;&#x8FD0;&#x884C;&#x6570;&#x636E;&#x5E93;&#xFF0C;&#x50A8;&#x5B58;&#x6709;&#x8282;&#x70B9;&#x3001;&#x722C;&#x866B;&#x3001;&#x4EFB;&#x52A1;&#x3001;&#x5B9A;&#x65F6;&#x4EFB;&#x52A1;&#x7B49;&#x6570;&#x636E;&#xFF0C;&#x53E6;&#x5916;GridFS&#x6587;&#x4EF6;&#x50A8;&#x5B58;&#x65B9;&#x5F0F;&#x662F;&#x4E3B;&#x8282;&#x70B9;&#x50A8;&#x5B58;&#x722C;&#x866B;&#x6587;&#x4EF6;&#x5E76;&#x540C;&#x6B65;&#x5230;&#x5DE5;&#x4F5C;&#x8282;&#x70B9;&#x7684;&#x4E2D;&#x95F4;&#x5A92;&#x4ECB;&#x3002;</p>
+<h3 id="redis">Redis</h3>
+<p>Redis&#x662F;&#x975E;&#x5E38;&#x53D7;&#x6B22;&#x8FCE;&#x7684;Key-Value&#x6570;&#x636E;&#x5E93;&#xFF0C;&#x5728;Crawlab&#x4E2D;&#x4E3B;&#x8981;&#x5B9E;&#x73B0;&#x8282;&#x70B9;&#x95F4;&#x6570;&#x636E;&#x901A;&#x4FE1;&#x7684;&#x529F;&#x80FD;&#x3002;&#x4F8B;&#x5982;&#xFF0C;&#x8282;&#x70B9;&#x4F1A;&#x5C06;&#x81EA;&#x5DF1;&#x4FE1;&#x606F;&#x901A;&#x8FC7;<code>HSET</code>&#x50A8;&#x5B58;&#x5728;Redis&#x7684;<code>nodes</code>&#x54C8;&#x5E0C;&#x5217;&#x8868;&#x4E2D;&#xFF0C;&#x4E3B;&#x8282;&#x70B9;&#x6839;&#x636E;&#x54C8;&#x5E0C;&#x5217;&#x8868;&#x6765;&#x5224;&#x65AD;&#x5728;&#x7EBF;&#x8282;&#x70B9;&#x3002;</p>
+<h3 id="&#x524D;&#x7AEF;">&#x524D;&#x7AEF;</h3>
+<p>&#x524D;&#x7AEF;&#x662F;&#x4E00;&#x4E2A;&#x57FA;&#x4E8E;<a href="https://github.com/PanJiaChen/vue-element-admin" target="_blank">Vue-Element-Admin</a>&#x7684;&#x5355;&#x9875;&#x5E94;&#x7528;&#x3002;&#x5176;&#x4E2D;&#x91CD;&#x7528;&#x4E86;&#x5F88;&#x591A;Element-UI&#x7684;&#x63A7;&#x4EF6;&#x6765;&#x652F;&#x6301;&#x76F8;&#x5E94;&#x7684;&#x5C55;&#x793A;&#x3002;</p>
 
                                 
                                 </section>
@@ -590,12 +590,12 @@ MONGO_DB = <span class="hljs-string">&apos;crawlab_test&apos;</span>
 
             
                 
-                <a href="./" class="navigation navigation-prev " aria-label="Previous page: 样例">
+                <a href="./" class="navigation navigation-prev " aria-label="Previous page: 原理">
                     <i class="fa fa-angle-left"></i>
                 </a>
                 
                 
-                <a href="PuppeteerIntegration.html" class="navigation navigation-next " aria-label="Next page: 与Puppeteer集成">
+                <a href="NodeCommunication.html" class="navigation navigation-next " aria-label="Next page: 节点通信">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -606,7 +606,7 @@ MONGO_DB = <span class="hljs-string">&apos;crawlab_test&apos;</span>
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"与Scrapy集成","level":"1.6.1","depth":2,"next":{"title":"与Puppeteer集成","level":"1.6.2","depth":2,"path":"Examples/PuppeteerIntegration.md","ref":"Examples/PuppeteerIntegration.md","articles":[]},"previous":{"title":"样例","level":"1.6","depth":1,"path":"Examples/README.md","ref":"Examples/README.md","articles":[{"title":"与Scrapy集成","level":"1.6.1","depth":2,"path":"Examples/ScrapyIntegration.md","ref":"Examples/ScrapyIntegration.md","articles":[]},{"title":"与Puppeteer集成","level":"1.6.2","depth":2,"path":"Examples/PuppeteerIntegration.md","ref":"Examples/PuppeteerIntegration.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"Examples/ScrapyIntegration.md","mtime":"2019-06-16T13:46:53.000Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-07-30T12:08:37.638Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"整体架构","level":"1.5.1","depth":2,"next":{"title":"节点通信","level":"1.5.2","depth":2,"path":"Architecture/NodeCommunication.md","ref":"Architecture/NodeCommunication.md","articles":[]},"previous":{"title":"原理","level":"1.5","depth":1,"path":"Architecture/README.md","ref":"Architecture/README.md","articles":[{"title":"整体架构","level":"1.5.1","depth":2,"path":"Architecture/Architecture.md","ref":"Architecture/Architecture.md","articles":[]},{"title":"节点通信","level":"1.5.2","depth":2,"path":"Architecture/NodeCommunication.md","ref":"Architecture/NodeCommunication.md","articles":[]},{"title":"节点监控","level":"1.5.3","depth":2,"path":"Architecture/NodeMonitoring.md","ref":"Architecture/NodeMonitoring.md","articles":[]},{"title":"爬虫部署","level":"1.5.4","depth":2,"path":"Architecture/SpiderDeployment.md","ref":"Architecture/SpiderDeployment.md","articles":[]},{"title":"任务执行","level":"1.5.5","depth":2,"path":"Architecture/TaskExecution.md","ref":"Architecture/TaskExecution.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"Architecture/Architecture.md","mtime":"2019-07-30T04:58:08.000Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-07-30T12:08:37.638Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

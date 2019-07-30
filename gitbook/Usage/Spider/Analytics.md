@@ -4,4 +4,4 @@
 
 要查看统计数据的话，只需要在`爬虫详情`中，点击`分析`标签，就可以看到爬虫的统计数据了。
 
-![](https://crawlab.oss-cn-hangzhou.aliyuncs.com/gitbook/spider-detail-analytics.png)
+![](https://crawlab.oss-cn-hangzhou.aliyuncs.com/v0.3.0/spider-analytics.png)

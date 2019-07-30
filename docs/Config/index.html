@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <title>与Scrapy集成 · GitBook</title>
+        <title>配置Crawlab · GitBook</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="GitBook 3.2.3">
@@ -57,10 +57,10 @@
     <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="PuppeteerIntegration.html" />
+    <link rel="next" href="../Usage/" />
     
     
-    <link rel="prev" href="./" />
+    <link rel="prev" href="../Installation/Direct.html" />
     
 
     </head>
@@ -147,9 +147,9 @@
             
         </li>
     
-        <li class="chapter " data-level="1.3" data-path="../Config/">
+        <li class="chapter active" data-level="1.3" data-path="./">
             
-                <a href="../Config/">
+                <a href="./">
             
                     
                     配置Crawlab
@@ -450,9 +450,9 @@
             
         </li>
     
-        <li class="chapter " data-level="1.6" data-path="./">
+        <li class="chapter " data-level="1.6" data-path="../Examples/">
             
-                <a href="./">
+                <a href="../Examples/">
             
                     
                     样例
@@ -464,9 +464,9 @@
             <ul class="articles">
                 
     
-        <li class="chapter active" data-level="1.6.1" data-path="ScrapyIntegration.html">
+        <li class="chapter " data-level="1.6.1" data-path="../Examples/ScrapyIntegration.html">
             
-                <a href="ScrapyIntegration.html">
+                <a href="../Examples/ScrapyIntegration.html">
             
                     
                     与Scrapy集成
@@ -477,9 +477,9 @@
             
         </li>
     
-        <li class="chapter " data-level="1.6.2" data-path="PuppeteerIntegration.html">
+        <li class="chapter " data-level="1.6.2" data-path="../Examples/PuppeteerIntegration.html">
             
-                <a href="PuppeteerIntegration.html">
+                <a href="../Examples/PuppeteerIntegration.html">
             
                     
                     与Puppeteer集成
@@ -525,7 +525,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href=".." >与Scrapy集成</a>
+        <a href=".." >配置Crawlab</a>
     </h1>
 </div>
 
@@ -540,29 +540,160 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h3 id="&#x4E0E;scrapy&#x96C6;&#x6210;">&#x4E0E;Scrapy&#x96C6;&#x6210;</h3>
-<p>&#x4EE5;&#x4E0B;&#x662F;Crawlab&#x8DDF;<code>Scrapy</code>&#x96C6;&#x6210;&#x7684;&#x4F8B;&#x5B50;&#xFF0C;&#x5229;&#x7528;&#x4E86;Crawlab&#x4F20;&#x8FC7;&#x6765;&#x7684;<code>task_id</code>&#x548C;<code>collection_name</code>&#x3002;</p>
-<pre><code class="lang-python"><span class="hljs-keyword">import</span> os
-<span class="hljs-keyword">from</span> pymongo <span class="hljs-keyword">import</span> MongoClient
-
-MONGO_HOST = <span class="hljs-string">&apos;192.168.99.100&apos;</span>
-MONGO_PORT = <span class="hljs-number">27017</span>
-MONGO_DB = <span class="hljs-string">&apos;crawlab_test&apos;</span>
-
-<span class="hljs-comment"># scrapy example in the pipeline</span>
-<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">JuejinPipeline</span><span class="hljs-params">(object)</span>:</span>
-    mongo = MongoClient(host=MONGO_HOST, port=MONGO_PORT)
-    db = mongo[MONGO_DB]
-    col_name = os.environ.get(<span class="hljs-string">&apos;CRAWLAB_COLLECTION&apos;</span>)
-    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> col_name:
-        col_name = <span class="hljs-string">&apos;test&apos;</span>
-    col = db[col_name]
-
-    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">process_item</span><span class="hljs-params">(self, item, spider)</span>:</span>
-        item[<span class="hljs-string">&apos;task_id&apos;</span>] = os.environ.get(<span class="hljs-string">&apos;CRAWLAB_TASK_ID&apos;</span>)
-        self.col.save(item)
-        <span class="hljs-keyword">return</span> item
+                                <p>&#x73AF;&#x5883;&#x914D;&#x7F6E;&#x662F;&#x7531;Go&#x7B2C;&#x4E09;&#x65B9;&#x5E93;viper&#x6765;&#x5B9E;&#x73B0;&#x7684;&#x3002;&#x5F53;&#x7A0B;&#x5E8F;&#x542F;&#x52A8;&#x65F6;&#xFF0C;viper&#x4F1A;&#x53BB;&#x8BFB;&#x53D6;<code>yaml</code>&#x914D;&#x7F6E;&#x6587;&#x4EF6;&#xFF0C;&#x4EE5;&#x53CA;&#x5C06;&#x73AF;&#x5883;&#x53D8;&#x91CF;&#x4E0E;&#x914D;&#x7F6E;&#x6587;&#x4EF6;&#x4E2D;&#x7684;&#x53D8;&#x91CF;&#x5BF9;&#x5E94;&#x8D77;&#x6765;&#x3002;</p>
+<p>&#x4EE5;&#x4E0B;&#x662F;<code>yaml</code>&#x914D;&#x7F6E;&#x6587;&#x4EF6;&#xFF0C;&#x5176;&#x4E2D;&#x7684;&#x53D8;&#x91CF;&#x53EF;&#x4EE5;&#x88AB;&#x4EE5;<code>CRAWLAB_</code>&#x4E3A;&#x524D;&#x7F00;&#x7684;&#x73AF;&#x5883;&#x53D8;&#x91CF;&#x6240;&#x8986;&#x76D6;&#x3002;</p>
+<pre><code class="lang-yaml"><span class="hljs-attr">api:</span>
+<span class="hljs-attr">  address:</span> <span class="hljs-string">&quot;localhost:8000&quot;</span>
+<span class="hljs-attr">mongo:</span>
+<span class="hljs-attr">  host:</span> localhost
+<span class="hljs-attr">  port:</span> <span class="hljs-number">27017</span>
+<span class="hljs-attr">  db:</span> crawlab_test
+<span class="hljs-attr">  username:</span> <span class="hljs-string">&quot;&quot;</span>
+<span class="hljs-attr">  password:</span> <span class="hljs-string">&quot;&quot;</span>
+<span class="hljs-attr">redis:</span>
+<span class="hljs-attr">  network:</span> tcp
+<span class="hljs-attr">  address:</span> <span class="hljs-string">&quot;localhost:6379&quot;</span>
+<span class="hljs-attr">log:</span>
+<span class="hljs-attr">  level:</span> info
+<span class="hljs-attr">  path:</span> <span class="hljs-string">&quot;/var/logs/crawlab&quot;</span>
+<span class="hljs-attr">server:</span>
+<span class="hljs-attr">  host:</span> <span class="hljs-number">0.0</span><span class="hljs-number">.0</span><span class="hljs-number">.0</span>
+<span class="hljs-attr">  port:</span> <span class="hljs-number">8000</span>
+<span class="hljs-attr">  master:</span> <span class="hljs-string">&quot;N&quot;</span>
+<span class="hljs-attr">  secret:</span> <span class="hljs-string">&quot;crawlab&quot;</span>
+<span class="hljs-attr">spider:</span>
+<span class="hljs-attr">  path:</span> <span class="hljs-string">&quot;/app/spiders&quot;</span>
+<span class="hljs-attr">task:</span>
+<span class="hljs-attr">  workers:</span> <span class="hljs-number">4</span>
+<span class="hljs-attr">other:</span>
+<span class="hljs-attr">  tmppath:</span> <span class="hljs-string">&quot;/tmp&quot;</span>
 </code></pre>
+<p>&#x73AF;&#x5883;&#x53D8;&#x91CF;&#x5217;&#x8868;&#x5982;&#x4E0B;&#x3002;</p>
+<table>
+<thead>
+<tr>
+<th>&#x73AF;&#x5883;&#x53D8;&#x91CF;</th>
+<th>yaml&#x53D8;&#x91CF;&#x8DEF;&#x5F84;</th>
+<th>&#x63CF;&#x8FF0;</th>
+<th>&#x9ED8;&#x8BA4;</th>
+<th>&#x53EF;&#x80FD;&#x503C;</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CRAWLAB_API_PATH</td>
+<td>api.path</td>
+<td>&#x524D;&#x7AEF;API&#x5730;&#x5740;</td>
+<td>localhost:8000</td>
+<td>&#x4EFB;&#x610F;</td>
+</tr>
+<tr>
+<td>CRAWLAB_MONGO_HOST</td>
+<td>mongo.host</td>
+<td>MongoDB Host&#x5730;&#x5740;</td>
+<td>localhost</td>
+<td>&#x4EFB;&#x610F;</td>
+</tr>
+<tr>
+<td>CRAWLAB_MONGO_PORT</td>
+<td>mongo.port</td>
+<td>MongoDB&#x7AEF;&#x53E3;&#x53F7;</td>
+<td>27017</td>
+<td>&#x4EFB;&#x610F;</td>
+</tr>
+<tr>
+<td>CRAWLAB_MONGO_PORT</td>
+<td>mongo.db</td>
+<td>MongoDB&#x6570;&#x636E;&#x5E93;&#x540D;</td>
+<td>crawlab_test</td>
+<td>&#x4EFB;&#x610F;</td>
+</tr>
+<tr>
+<td>CRAWLAB_MONGO_USERNAME</td>
+<td>mongo.username</td>
+<td>MongoDB&#x7528;&#x6237;&#x540D;</td>
+<td>&#x7A7A;</td>
+<td>&#x4EFB;&#x610F;</td>
+</tr>
+<tr>
+<td>CRAWLAB_MONGO_PASSWORD</td>
+<td>mongo.password</td>
+<td>MongoDB&#x5BC6;&#x7801;</td>
+<td>&#x7A7A;</td>
+<td>&#x4EFB;&#x610F;</td>
+</tr>
+<tr>
+<td>CRAWLAB_REDIS_NETWORK</td>
+<td>redis.network</td>
+<td>Redis&#x7F51;&#x7EDC;&#x534F;&#x8BAE;</td>
+<td>tcp</td>
+<td>tcp, udp</td>
+</tr>
+<tr>
+<td>CRAWLAB_REDIS_ADDRESS</td>
+<td>redis.address</td>
+<td>Redis&#x5730;&#x5740;</td>
+<td>localhost:6379</td>
+<td>&#x4EFB;&#x610F;</td>
+</tr>
+<tr>
+<td>CRAWLAB_LOG_LEVEL</td>
+<td>log.level</td>
+<td>&#x65E5;&#x5FD7;&#x7EA7;&#x522B;</td>
+<td>info</td>
+<td>debug, info, warn, error</td>
+</tr>
+<tr>
+<td>CRAWLAB_LOG_PATH</td>
+<td>log.path</td>
+<td>&#x4EFB;&#x52A1;&#x65E5;&#x5FD7;&#x6240;&#x5728;&#x76EE;&#x5F55;</td>
+<td><code>/var/logs/crawlab</code></td>
+<td>&#x4EFB;&#x610F;</td>
+</tr>
+<tr>
+<td>CRAWLAB_SERVER_HOST</td>
+<td>server.host</td>
+<td>&#x670D;&#x52A1;&#x5668;&#x7ED1;&#x5B9A;IP</td>
+<td>0.0.0.0</td>
+<td>&#x4EFB;&#x610F;</td>
+</tr>
+<tr>
+<td>CRAWLAB_SERVER_PORT</td>
+<td>server.port</td>
+<td>&#x670D;&#x52A1;&#x5668;&#x7ED1;&#x5B9A;&#x7AEF;&#x53E3;</td>
+<td>8000</td>
+<td>&#x4EFB;&#x610F;</td>
+</tr>
+<tr>
+<td>CRAWLAB_SERVER_MASTER</td>
+<td>server.master</td>
+<td>&#x8BE5;&#x8282;&#x70B9;&#x662F;&#x5426;&#x4E3A;&#x4E3B;&#x8282;&#x70B9;</td>
+<td>N</td>
+<td>Y, N</td>
+</tr>
+<tr>
+<td>CRAWLAB_SPIDER_PATH</td>
+<td>spider.path</td>
+<td>&#x722C;&#x866B;&#x6240;&#x5728;&#x76EE;&#x5F55;</td>
+<td>/app/spiders</td>
+<td>&#x4EFB;&#x610F;</td>
+</tr>
+<tr>
+<td>CRAWLAB_TASK_WORKERS</td>
+<td>task.workers</td>
+<td>&#x4EFB;&#x52A1;&#x5E76;&#x884C;&#x6267;&#x884C;&#x4E2A;&#x6570;</td>
+<td>4</td>
+<td>&#x4EFB;&#x610F;&#x6570;&#x5B57;</td>
+</tr>
+<tr>
+<td>CRAWLAB_OTHER_TMPPATH</td>
+<td>other.tmppath</td>
+<td>&#x4E34;&#x65F6;&#x6587;&#x4EF6;&#x76EE;&#x5F55;</td>
+<td>/tmp</td>
+<td>&#x4EFB;&#x610F;</td>
+</tr>
+</tbody>
+</table>
 
                                 
                                 </section>
@@ -590,12 +721,12 @@ MONGO_DB = <span class="hljs-string">&apos;crawlab_test&apos;</span>
 
             
                 
-                <a href="./" class="navigation navigation-prev " aria-label="Previous page: 样例">
+                <a href="../Installation/Direct.html" class="navigation navigation-prev " aria-label="Previous page: 直接部署">
                     <i class="fa fa-angle-left"></i>
                 </a>
                 
                 
-                <a href="PuppeteerIntegration.html" class="navigation navigation-next " aria-label="Next page: 与Puppeteer集成">
+                <a href="../Usage/" class="navigation navigation-next " aria-label="Next page: 使用Crawlab">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -606,7 +737,7 @@ MONGO_DB = <span class="hljs-string">&apos;crawlab_test&apos;</span>
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"与Scrapy集成","level":"1.6.1","depth":2,"next":{"title":"与Puppeteer集成","level":"1.6.2","depth":2,"path":"Examples/PuppeteerIntegration.md","ref":"Examples/PuppeteerIntegration.md","articles":[]},"previous":{"title":"样例","level":"1.6","depth":1,"path":"Examples/README.md","ref":"Examples/README.md","articles":[{"title":"与Scrapy集成","level":"1.6.1","depth":2,"path":"Examples/ScrapyIntegration.md","ref":"Examples/ScrapyIntegration.md","articles":[]},{"title":"与Puppeteer集成","level":"1.6.2","depth":2,"path":"Examples/PuppeteerIntegration.md","ref":"Examples/PuppeteerIntegration.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"Examples/ScrapyIntegration.md","mtime":"2019-06-16T13:46:53.000Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-07-30T12:08:37.638Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"配置Crawlab","level":"1.3","depth":1,"next":{"title":"使用Crawlab","level":"1.4","depth":1,"path":"Usage/README.md","ref":"Usage/README.md","articles":[{"title":"节点","level":"1.4.1","depth":2,"path":"Usage/Node/README.md","ref":"Usage/Node/README.md","articles":[{"title":"查看节点列表","level":"1.4.1.1","depth":3,"path":"Usage/Node/View.md","ref":"Usage/Node/View.md","articles":[]},{"title":"查看节点拓扑图","level":"1.4.1.2","depth":3,"path":"Usage/Node/Network.md","ref":"Usage/Node/Network.md","articles":[]}]},{"title":"爬虫","level":"1.4.2","depth":2,"path":"Usage/Spider/README.md","ref":"Usage/Spider/README.md","articles":[{"title":"创建爬虫","level":"1.4.2.1","depth":3,"path":"Usage/Spider/Create.md","ref":"Usage/Spider/Create.md","articles":[]},{"title":"部署爬虫","level":"1.4.2.2","depth":3,"path":"Usage/Spider/Deploy.md","ref":"Usage/Spider/Deploy.md","articles":[]},{"title":"运行爬虫","level":"1.4.2.3","depth":3,"path":"Usage/Spider/Run.md","ref":"Usage/Spider/Run.md","articles":[]},{"title":"统计数据","level":"1.4.2.4","depth":3,"path":"Usage/Spider/Analytics.md","ref":"Usage/Spider/Analytics.md","articles":[]}]},{"title":"任务","level":"1.4.3","depth":2,"path":"Usage/Task/README.md","ref":"Usage/Task/README.md","articles":[{"title":"查看任务","level":"1.4.3.1","depth":3,"path":"Usage/Task/View.md","ref":"Usage/Task/View.md","articles":[]},{"title":"操作任务","level":"1.4.3.2","depth":3,"path":"Usage/Task/Action.md","ref":"Usage/Task/Action.md","articles":[]},{"title":"下载结果","level":"1.4.3.3","depth":3,"path":"Usage/Task/DownloadResults.md","ref":"Usage/Task/DownloadResults.md","articles":[]}]},{"title":"定时任务","level":"1.4.4","depth":2,"path":"Usage/Schedule/README.md","ref":"Usage/Schedule/README.md","articles":[]}]},"previous":{"title":"直接部署","level":"1.2.2","depth":2,"path":"Installation/Direct.md","ref":"Installation/Direct.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"Config/README.md","mtime":"2019-07-29T14:16:46.000Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-07-30T12:08:37.638Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
