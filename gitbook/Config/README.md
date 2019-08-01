@@ -46,8 +46,6 @@ CRAWLAB_REDIS_ADDRESS  | redis.address  | Redis地址 | localhost | 任意
 CRAWLAB_REDIS_PASSWORD | redis.password | Redis密码 | 空 | 任意
 CRAWLAB_REDIS_DATABASE | redis.database | Redis db | 1 | 数值
 CRAWLAB_REDIS_PORT | redis.port | Redis 端口 | 空 | 数值
-CRAWLAB_REDIS_NETWORK | redis.network | Redis网络协议 | tcp | tcp, udp
-CRAWLAB_REDIS_ADDRESS | redis.address | Redis地址 | localhost:6379 | 任意
 CRAWLAB_LOG_LEVEL | log.level | 日志级别 | info | debug, info, warn, error
 CRAWLAB_LOG_PATH | log.path | 任务日志所在目录 | `/var/logs/crawlab` | 任意
 CRAWLAB_SERVER_HOST | server.host | 服务器绑定IP | 0.0.0.0 | 任意
