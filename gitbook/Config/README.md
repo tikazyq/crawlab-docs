@@ -12,7 +12,7 @@ mongo:
   username: ""
   password: ""
 redis:
-  address: 127.0.0.1
+  address: localhost
   password: ""
   database: 1
   port: 6379
@@ -30,7 +30,6 @@ task:
   workers: 4
 other:
   tmppath: "/tmp"
-
 ```
 
 环境变量列表如下。
@@ -40,12 +39,12 @@ other:
 CRAWLAB_API_PATH | api.path | 前端API地址 | localhost:8000 | 任意
 CRAWLAB_MONGO_HOST | mongo.host | MongoDB Host地址 | localhost | 任意
 CRAWLAB_MONGO_PORT | mongo.port | MongoDB端口号 | 27017 | 任意
-CRAWLAB_MONGO_PORT | mongo.db | MongoDB数据库名 | crawlab_test | 任意
+CRAWLAB_MONGO_DB | mongo.db | MongoDB数据库名 | crawlab_test | 任意
 CRAWLAB_MONGO_USERNAME | mongo.username | MongoDB用户名 | 空 | 任意
 CRAWLAB_MONGO_PASSWORD | mongo.password | MongoDB密码 | 空 | 任意
-CRAWLAB_REDIS_ADDRESS  | redis.address  | Redis地址 | 空 | 任意
+CRAWLAB_REDIS_ADDRESS  | redis.address  | Redis地址 | localhost | 任意
 CRAWLAB_REDIS_PASSWORD | redis.password | Redis密码 | 空 | 任意
-CRAWLAB_REDIS_DATABASE | redis.database | Redis db | 空 | 数值
+CRAWLAB_REDIS_DATABASE | redis.database | Redis db | 1 | 数值
 CRAWLAB_REDIS_PORT | redis.port | Redis 端口 | 空 | 数值
 CRAWLAB_REDIS_NETWORK | redis.network | Redis网络协议 | tcp | tcp, udp
 CRAWLAB_REDIS_ADDRESS | redis.address | Redis地址 | localhost:6379 | 任意
