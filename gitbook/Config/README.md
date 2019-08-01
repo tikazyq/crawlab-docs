@@ -11,6 +11,7 @@ mongo:
   db: crawlab_test
   username: ""
   password: ""
+  authSource: "admin"
 redis:
   address: localhost
   password: ""
@@ -42,6 +43,7 @@ CRAWLAB_MONGO_PORT | mongo.port | MongoDB端口号 | 27017 | 任意
 CRAWLAB_MONGO_DB | mongo.db | MongoDB数据库名 | crawlab_test | 任意
 CRAWLAB_MONGO_USERNAME | mongo.username | MongoDB用户名 | 空 | 任意
 CRAWLAB_MONGO_PASSWORD | mongo.password | MongoDB密码 | 空 | 任意
+CRAWLAB_MONGO_AUTHSOURCE | mongo.authSource | MongoDB AuthSource | 空 | 任意
 CRAWLAB_REDIS_ADDRESS  | redis.address  | Redis地址 | localhost | 任意
 CRAWLAB_REDIS_PASSWORD | redis.password | Redis密码 | 空 | 任意
 CRAWLAB_REDIS_DATABASE | redis.database | Redis db | 1 | 数值
