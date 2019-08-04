@@ -4,10 +4,11 @@
 
 ![](https://crawlab.oss-cn-hangzhou.aliyuncs.com/v0.3.0/node-deployment.png)
 
-如上图所示，整个爬虫自动部署的生命周期如下：
-1. 主节点周期性的触发爬虫部署程序；
-2. 主节点将爬虫打包成zip文件，并上传到MongoDB GridFS，并且在MongoDB的`spiders`表里写入`file_id`文件ID；
-3. 主节点通过Redis `PubSub`发布消息（包含文件ID）给工作节点，通知工作节点获取爬虫文件；
+如上图所示，整个爬虫自动部署的生命周期如下(源码在`services/spider.go#InitSpiderService`)：
+
+1. 主节点每5秒，会从爬虫的目录获取爬虫信息，然后更新到数据库（这个过程不涉及文件上传）；
+2. 主节点每60秒,从数据库获取所有的爬虫信息，然后将爬虫打包成zip文件，并上传到MongoDB GridFS，并且在MongoDB的`spiders`表里写入`file_id`文件ID；
+3. 主节点通过Redis `PubSub`发布消息（`file.upload`事件，包含文件ID）给工作节点，通知工作节点获取爬虫文件；
 4. 工作节点接收到获取爬虫文件的消息，从MongoDB GridFS获取zip文件，并解压储存在本地。
 
 这样，所有爬虫将被周期性的部署在工作节点上。
