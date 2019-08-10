@@ -54,7 +54,7 @@ docker run --restart always --name crawlab \
         -e CRAWLAB_MONGO_HOST=192.168.99.1 \
         -e CRAWLAB_SERVER_MASTER=N \
         -v /var/logs/crawlab:/var/logs/crawlab \
-        tikazyq/crawlab:0.3.0
+        tikazyq/crawlab:latest
 ```
 
 这里，我们将`CRAWLAB_SERVER_MASTER`设置为`N`，表示它为工作节点（切勿设置多个节点为`Y`，这可能会导致无法预测的问题）。
