@@ -17,3 +17,17 @@
 这些是demo爬虫，如果需要添加您自己的爬虫，请将您的爬虫文件打包成zip文件，再在爬虫页面中点击**添加爬虫**上传就可以了。
 
 注意，Crawlab将取文件名作为爬虫名称，这个您可以后期更改。另外，请不要将zip文件名设置为中文，可能会导致上传不成功。
+
+#### 4. 我执行了爬虫，但是在Crawlab上看不到结果
+
+强烈建议您先阅读了[与Scrapy集成](https://tikazyq.github.io/crawlab-docs/Examples/ScrapyIntegration.html)。
+
+简单来说，Crawlab目前只支持MongoDB，而且您需要保证存放的数据与Crawlab的数据库一致，另外您需要在传给MongoDB时加上`task_id`，并设置为Crawlab传过来的环境变量`CRAWLAB_TASK_ID`，您需要存放的collection名字为同样是传过来的`CRAWLAB_COLLECTION`。
+
+#### 5. 为何启动Crawlab时，后台日志显示`no reachable servers`？
+
+这是因为您没有连上MongoDB，请确保您的`CRAWLAB_MONGO_HOST`是否设置对。如果为Docker Compose，可以将其设置为`mongo`。
+
+#### 6. 在爬虫程序中打印中文会报错
+
+有不少朋友反映这个问题了，可能是跟Docker镜像有关。建议您暂时不打印中文，等待我们fix这个问题。
