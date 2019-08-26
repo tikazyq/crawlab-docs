@@ -90,7 +90,7 @@ services:
     environment:
       CRAWLAB_SERVER_MASTER: "N"
       CRAWLAB_MONGO_HOST: "mongo"
-      CRAWLAB_REDIS_ADDRESS: "redis:6379"
+      CRAWLAB_REDIS_ADDRESS: "redis"
     depends_on:
       - mongo
       - redis
