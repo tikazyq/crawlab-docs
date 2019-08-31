@@ -604,11 +604,17 @@
 <span class="hljs-attr">log:</span>
 <span class="hljs-attr">  level:</span> info
 <span class="hljs-attr">  path:</span> <span class="hljs-string">&quot;/var/logs/crawlab&quot;</span>
+<span class="hljs-attr">  isDeletePeriodically:</span> <span class="hljs-string">&quot;Y&quot;</span>
+<span class="hljs-attr">  deleteFrequency:</span> <span class="hljs-string">&quot;@hourly&quot;</span>
 <span class="hljs-attr">server:</span>
 <span class="hljs-attr">  host:</span> <span class="hljs-number">0.0</span><span class="hljs-number">.0</span><span class="hljs-number">.0</span>
 <span class="hljs-attr">  port:</span> <span class="hljs-number">8000</span>
 <span class="hljs-attr">  master:</span> <span class="hljs-string">&quot;N&quot;</span>
 <span class="hljs-attr">  secret:</span> <span class="hljs-string">&quot;crawlab&quot;</span>
+<span class="hljs-attr">  register:</span>
+    <span class="hljs-comment"># mac&#x5730;&#x5740; &#x6216;&#x8005; ip&#x5730;&#x5740;&#xFF0C;&#x5982;&#x679C;&#x662F;ip&#xFF0C;&#x5219;&#x9700;&#x8981;&#x624B;&#x52A8;&#x6307;&#x5B9A;IP</span>
+<span class="hljs-attr">    type:</span> <span class="hljs-string">&quot;mac&quot;</span>
+<span class="hljs-attr">    ip:</span> <span class="hljs-string">&quot;&quot;</span>
 <span class="hljs-attr">spider:</span>
 <span class="hljs-attr">  path:</span> <span class="hljs-string">&quot;/app/spiders&quot;</span>
 <span class="hljs-attr">task:</span>
@@ -720,6 +726,20 @@
 <td>&#x4EFB;&#x610F;</td>
 </tr>
 <tr>
+<td>CRAWLAB_LOG_ISDELETEPERIODICALLY</td>
+<td>log.isDeletePeriodically</td>
+<td>&#x662F;&#x5426;&#x5B9A;&#x671F;&#x5220;&#x9664;&#x65E5;&#x5FD7;</td>
+<td>Y</td>
+<td>Y, N</td>
+</tr>
+<tr>
+<td>CRAWLAB_LOG_DELETEFREQUENCY</td>
+<td>log.deleteFrequency</td>
+<td>&#x5B9A;&#x671F;&#x5220;&#x9664;&#x65E5;&#x5FD7;&#x9891;&#x7387;</td>
+<td>@hourly</td>
+<td>&#x4EFB;&#x610F;</td>
+</tr>
+<tr>
 <td>CRAWLAB_SERVER_HOST</td>
 <td>server.host</td>
 <td>&#x670D;&#x52A1;&#x5668;&#x7ED1;&#x5B9A;IP</td>
@@ -739,6 +759,27 @@
 <td>&#x8BE5;&#x8282;&#x70B9;&#x662F;&#x5426;&#x4E3A;&#x4E3B;&#x8282;&#x70B9;</td>
 <td>N</td>
 <td>Y, N</td>
+</tr>
+<tr>
+<td>CRAWLAB_SERVER_SECRET</td>
+<td>server.secret</td>
+<td>&#x670D;&#x52A1;&#x5668;&#x5BC6;&#x94A5;</td>
+<td>crawlab</td>
+<td>&#x4EFB;&#x610F;</td>
+</tr>
+<tr>
+<td>CRAWLAB_SERVER_REGISTER_TYPE</td>
+<td>server.register.type</td>
+<td>&#x8282;&#x70B9;&#x6CE8;&#x518C;&#x7C7B;&#x522B;</td>
+<td>mac</td>
+<td>mac, ip</td>
+</tr>
+<tr>
+<td>CRAWLAB_SERVER_REGISTER_IP</td>
+<td>server.register.ip</td>
+<td>&#x8282;&#x70B9;&#x6CE8;&#x518C;IP</td>
+<td>&#x7A7A;</td>
+<td>&#x4EFB;&#x610F;</td>
 </tr>
 <tr>
 <td>CRAWLAB_SPIDER_PATH</td>
@@ -806,7 +847,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"配置Crawlab","level":"1.3","depth":1,"next":{"title":"使用Crawlab","level":"1.4","depth":1,"path":"Usage/README.md","ref":"Usage/README.md","articles":[{"title":"节点","level":"1.4.1","depth":2,"path":"Usage/Node/README.md","ref":"Usage/Node/README.md","articles":[{"title":"查看节点列表","level":"1.4.1.1","depth":3,"path":"Usage/Node/View.md","ref":"Usage/Node/View.md","articles":[]},{"title":"查看节点拓扑图","level":"1.4.1.2","depth":3,"path":"Usage/Node/Network.md","ref":"Usage/Node/Network.md","articles":[]}]},{"title":"爬虫","level":"1.4.2","depth":2,"path":"Usage/Spider/README.md","ref":"Usage/Spider/README.md","articles":[{"title":"创建爬虫","level":"1.4.2.1","depth":3,"path":"Usage/Spider/Create.md","ref":"Usage/Spider/Create.md","articles":[{"title":"自定义爬虫","level":"1.4.2.1.1","depth":4,"path":"Usage/Spider/CustomizedSpider.md","ref":"Usage/Spider/CustomizedSpider.md","articles":[]},{"title":"可配置爬虫","level":"1.4.2.1.2","depth":4,"path":"Usage/Spider/ConfigurableSpider.md","ref":"Usage/Spider/ConfigurableSpider.md","articles":[]}]},{"title":"部署爬虫","level":"1.4.2.2","depth":3,"path":"Usage/Spider/Deploy.md","ref":"Usage/Spider/Deploy.md","articles":[]},{"title":"运行爬虫","level":"1.4.2.3","depth":3,"path":"Usage/Spider/Run.md","ref":"Usage/Spider/Run.md","articles":[]},{"title":"统计数据","level":"1.4.2.4","depth":3,"path":"Usage/Spider/Analytics.md","ref":"Usage/Spider/Analytics.md","articles":[]}]},{"title":"任务","level":"1.4.3","depth":2,"path":"Usage/Task/README.md","ref":"Usage/Task/README.md","articles":[{"title":"查看任务","level":"1.4.3.1","depth":3,"path":"Usage/Task/View.md","ref":"Usage/Task/View.md","articles":[]},{"title":"操作任务","level":"1.4.3.2","depth":3,"path":"Usage/Task/Action.md","ref":"Usage/Task/Action.md","articles":[]},{"title":"下载结果","level":"1.4.3.3","depth":3,"path":"Usage/Task/DownloadResults.md","ref":"Usage/Task/DownloadResults.md","articles":[]}]},{"title":"定时任务","level":"1.4.4","depth":2,"path":"Usage/Schedule/README.md","ref":"Usage/Schedule/README.md","articles":[]}]},"previous":{"title":"直接部署","level":"1.2.2","depth":2,"path":"Installation/Direct.md","ref":"Installation/Direct.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"Config/README.md","mtime":"2019-08-10T06:55:56.000Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-08-24T04:36:08.161Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"配置Crawlab","level":"1.3","depth":1,"next":{"title":"使用Crawlab","level":"1.4","depth":1,"path":"Usage/README.md","ref":"Usage/README.md","articles":[{"title":"节点","level":"1.4.1","depth":2,"path":"Usage/Node/README.md","ref":"Usage/Node/README.md","articles":[{"title":"查看节点列表","level":"1.4.1.1","depth":3,"path":"Usage/Node/View.md","ref":"Usage/Node/View.md","articles":[]},{"title":"查看节点拓扑图","level":"1.4.1.2","depth":3,"path":"Usage/Node/Network.md","ref":"Usage/Node/Network.md","articles":[]}]},{"title":"爬虫","level":"1.4.2","depth":2,"path":"Usage/Spider/README.md","ref":"Usage/Spider/README.md","articles":[{"title":"创建爬虫","level":"1.4.2.1","depth":3,"path":"Usage/Spider/Create.md","ref":"Usage/Spider/Create.md","articles":[{"title":"自定义爬虫","level":"1.4.2.1.1","depth":4,"path":"Usage/Spider/CustomizedSpider.md","ref":"Usage/Spider/CustomizedSpider.md","articles":[]},{"title":"可配置爬虫","level":"1.4.2.1.2","depth":4,"path":"Usage/Spider/ConfigurableSpider.md","ref":"Usage/Spider/ConfigurableSpider.md","articles":[]}]},{"title":"部署爬虫","level":"1.4.2.2","depth":3,"path":"Usage/Spider/Deploy.md","ref":"Usage/Spider/Deploy.md","articles":[]},{"title":"运行爬虫","level":"1.4.2.3","depth":3,"path":"Usage/Spider/Run.md","ref":"Usage/Spider/Run.md","articles":[]},{"title":"统计数据","level":"1.4.2.4","depth":3,"path":"Usage/Spider/Analytics.md","ref":"Usage/Spider/Analytics.md","articles":[]}]},{"title":"任务","level":"1.4.3","depth":2,"path":"Usage/Task/README.md","ref":"Usage/Task/README.md","articles":[{"title":"查看任务","level":"1.4.3.1","depth":3,"path":"Usage/Task/View.md","ref":"Usage/Task/View.md","articles":[]},{"title":"操作任务","level":"1.4.3.2","depth":3,"path":"Usage/Task/Action.md","ref":"Usage/Task/Action.md","articles":[]},{"title":"下载结果","level":"1.4.3.3","depth":3,"path":"Usage/Task/DownloadResults.md","ref":"Usage/Task/DownloadResults.md","articles":[]}]},{"title":"定时任务","level":"1.4.4","depth":2,"path":"Usage/Schedule/README.md","ref":"Usage/Schedule/README.md","articles":[]}]},"previous":{"title":"直接部署","level":"1.2.2","depth":2,"path":"Installation/Direct.md","ref":"Installation/Direct.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"Config/README.md","mtime":"2019-08-31T03:50:52.079Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-08-31T03:52:19.927Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
